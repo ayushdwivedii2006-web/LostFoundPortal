@@ -1,0 +1,235 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Claim Item | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- Animated Background -->
+
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="glow glow-three"></div>
+
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔎 Lost<span>&</span>Found
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/my-reports">
+                My Reports
+            </a>
+
+            <a href="/report">
+                Report Item
+            </a>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Main -->
+
+    <main class="dashboard">
+
+
+        <!-- Header -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <div class="badge">
+                    📦 Item Claim
+                </div>
+
+                <h1>
+                    Claim <span>This Item</span>
+                </h1>
+
+                <p>
+                    Tell the reporter why you believe this item belongs to you.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('report_details', item_id=item['id']) }}" class="secondary-btn">
+
+                ← Back to Details
+
+            </a>
+
+        </div>
+
+
+        <!-- Claim Card -->
+
+        <div class="details-card">
+
+
+            <!-- Item Image -->
+
+            {% if item["image"] %}
+
+            <div class="details-image">
+
+                <img src="{{ url_for('static', filename='uploads/' + item['image']) }}" alt="{{ item['item_name'] }}">
+
+            </div>
+
+            {% else %}
+
+            <div class="details-no-image">
+
+                📦
+
+                <p>
+                    No image uploaded
+                </p>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- Claim Content -->
+
+            <div class="details-content">
+
+
+                <!-- Item Type -->
+
+                <div class="details-status">
+
+                    <span class="item-type">
+                        {{ item["item_type"] }}
+                    </span>
+
+                    <span class="item-status">
+                        {{ item["status"] }}
+                    </span>
+
+                </div>
+
+
+                <!-- Item Name -->
+
+                <h2>
+                    {{ item["item_name"] }}
+                </h2>
+
+
+                <!-- Item Info -->
+
+                <div class="details-info">
+
+                    <div>
+
+                        <strong>
+                            📂 Category
+                        </strong>
+
+                        <span>
+                            {{ item["category"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            📍 Location
+                        </strong>
+
+                        <span>
+                            {{ item["location"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            📅 Date
+                        </strong>
+
+                        <span>
+                            {{ item["item_date"] }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Claim Form -->
+
+                <form action="{{ url_for('claim_item', item_id=item['id']) }}" method="POST" class="claim-form">
+
+
+                    <div class="form-group">
+
+                        <label for="message">
+                            Why do you believe this is your item?
+                        </label>
+
+                        <textarea id="message" name="message" rows="6" required
+                            placeholder="Describe identifying details that can help the reporter verify your claim..."></textarea>
+
+                    </div>
+
+
+                    <div class="report-actions">
+
+                        <button type="submit" class="primary-btn">
+                            📩 Submit Claim
+                        </button>
+
+
+                        <a href="{{ url_for('report_details', item_id=item['id']) }}" class="secondary-btn">
+                            Cancel
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
+```

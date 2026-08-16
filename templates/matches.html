@@ -1,0 +1,461 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Possible Matches | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         ANIMATED BACKGROUND
+    ========================== -->
+
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="glow glow-three"></div>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔎 Lost<span>&</span>Found
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('my_reports') }}">
+                My Reports
+            </a>
+
+            <a href="{{ url_for('report') }}">
+                Report Item
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="dashboard">
+
+
+        <!-- =========================
+             HEADER
+        ========================== -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <div class="badge">
+                    🔍 Smart Matching
+                </div>
+
+                <h1>
+                    Possible <span>Matches</span>
+                </h1>
+
+                <p>
+                    Reports that may be related to your item.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('report_details', item_id=item['id']) }}" class="secondary-btn">
+                ← Back to Details
+            </a>
+
+        </div>
+
+
+        <!-- =========================
+             CURRENT REPORT
+        ========================== -->
+
+        <section class="recent-section">
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        Your Report
+                    </h2>
+
+                    <p>
+                        Matching is based on item name,
+                        category and location.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="match-source-card">
+
+
+                <!-- IMAGE -->
+
+                {% if item["image"] %}
+
+                <div class="match-source-image">
+
+                    <img src="{{ url_for('static', filename='uploads/' + item['image']) }}"
+                        alt="{{ item['item_name'] }}">
+
+                </div>
+
+                {% else %}
+
+                <div class="match-source-image no-image">
+                    📦
+                </div>
+
+                {% endif %}
+
+
+                <!-- CONTENT -->
+
+                <div class="match-source-content">
+
+                    <div class="item-top">
+
+                        <span class="item-type">
+                            {{ item["item_type"] }}
+                        </span>
+
+
+                        {% if item["status"] == "recovered" %}
+
+                        <span class="item-status recovered-label">
+                            ✅ Recovered
+                        </span>
+
+                        {% else %}
+
+                        <span class="item-status">
+                            {{ item["status"] }}
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <h3>
+                        {{ item["item_name"] }}
+                    </h3>
+
+
+                    <p>
+                        {{ item["description"] or "No description provided." }}
+                    </p>
+
+
+                    <div class="item-info">
+
+                        <span>
+                            📂 {{ item["category"] }}
+                        </span>
+
+                        <span>
+                            📍 {{ item["location"] }}
+                        </span>
+
+                        <span>
+                            📅 {{ item["item_date"] }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             POSSIBLE MATCHES
+        ========================== -->
+
+        <section class="recent-section">
+
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        🔗 Matching Reports
+                    </h2>
+
+                    <p>
+                        We found these reports that may match your item.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {% if matched_items %}
+
+
+            <div class="items-grid">
+
+
+                {% for match in matched_items %}
+
+
+                <div class="item-card match-card">
+
+
+                    <!-- =========================
+                         MATCH SCORE
+                    ========================== -->
+
+                    <div class="match-badge">
+
+                        {% if match["match_score"] >= 80 %}
+
+                        🟢 {{ match["match_score"] }}% — Strong Match
+
+                        {% elif match["match_score"] >= 50 %}
+
+                        🟡 {{ match["match_score"] }}% — Good Match
+
+                        {% else %}
+
+                        🔵 {{ match["match_score"] }}% — Possible Match
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =========================
+                         TYPE + STATUS
+                    ========================== -->
+
+                    <div class="item-top">
+
+                        <span class="item-type">
+                            {{ match["item_type"] }}
+                        </span>
+
+
+                        {% if match["status"] == "recovered" %}
+
+                        <span class="item-status recovered-label">
+                            ✅ Recovered
+                        </span>
+
+                        {% else %}
+
+                        <span class="item-status">
+                            {{ match["status"] }}
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =========================
+                         IMAGE
+                    ========================== -->
+
+                    {% if match["image"] %}
+
+                    <div class="item-image">
+
+                        <img src="{{ url_for('static', filename='uploads/' + match['image']) }}"
+                            alt="{{ match['item_name'] }}">
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="item-image no-image">
+                        📦
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- =========================
+                         ITEM NAME
+                    ========================== -->
+
+                    <h3>
+                        {{ match["item_name"] }}
+                    </h3>
+
+
+                    <!-- =========================
+                         DESCRIPTION
+                    ========================== -->
+
+                    <p>
+                        {{ match["description"] or "No description provided." }}
+                    </p>
+
+
+                    <!-- =========================
+                         INFORMATION
+                    ========================== -->
+
+                    <div class="item-info">
+
+                        <span>
+                            📂 {{ match["category"] }}
+                        </span>
+
+                        <span>
+                            📍 {{ match["location"] }}
+                        </span>
+
+                        <span>
+                            📅 {{ match["item_date"] }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================
+                         MATCH REASONS
+                    ========================== -->
+
+                    {% if match["match_reasons"] %}
+
+                    <div class="match-reasons">
+
+                        <strong>
+                            🔎 Why this may match:
+                        </strong>
+
+                        <ul>
+
+                            {% for reason in match["match_reasons"] %}
+
+                            <li>
+                                ✅ {{ reason }}
+                            </li>
+
+                            {% endfor %}
+
+                        </ul>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- =========================
+                         ACTION BUTTONS
+                    ========================== -->
+
+                    <div class="report-actions">
+
+
+                        <!-- VIEW DETAILS -->
+
+                        <a href="{{ url_for('report_details', item_id=match['id']) }}" class="details-btn">
+                            👁️ View Details
+                        </a>
+
+
+                        <!-- PRIVATE CHAT -->
+
+                        <a href="{{ url_for(
+                                'start_chat',
+                                item_id=item['id'],
+                                match_id=match['id']
+                            ) }}" class="primary-btn">
+                            💬 Private Chat
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- =========================
+                 NO MATCH
+            ========================== -->
+
+            <div class="empty-state">
+
+                <div>
+                    🔍
+                </div>
+
+                <h3>
+                    No Possible Matches Found
+                </h3>
+
+                <p>
+                    We couldn't find a matching report right now.
+                    Try checking again later.
+                </p>
+
+                <a href="{{ url_for('report') }}" class="primary-btn">
+                    + Report Another Item
+                </a>
+
+            </div>
+
+
+            {% endif %}
+
+
+        </section>
+
+
+    </main>
+
+
+</body>
+
+</html>
+```

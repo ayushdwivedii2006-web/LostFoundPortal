@@ -1,0 +1,411 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Report Details | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         ANIMATED BACKGROUND
+    ========================== -->
+
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="glow glow-three"></div>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔎 Lost<span>&</span>Found
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/my-reports">
+                My Reports
+            </a>
+
+            <a href="/my-claims">
+                My Claims
+            </a>
+
+            <a href="/report">
+                Report Item
+            </a>
+
+            <a href="/claims">
+                Claims
+            </a>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main class="dashboard">
+
+
+        <!-- =========================
+             HEADER
+        ========================== -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <div class="badge">
+                    👁️ Report Details
+                </div>
+
+                <h1>
+                    Item <span>Details</span>
+                </h1>
+
+                <p>
+                    Complete information about this lost or found item.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             DETAILS CARD
+        ========================== -->
+
+        <div class="details-card">
+
+
+            <!-- =========================
+                 IMAGE
+            ========================== -->
+
+            {% if item["image"] %}
+
+            <div class="details-image">
+
+                <img src="{{ url_for('static', filename='uploads/' + item['image']) }}" alt="{{ item['item_name'] }}">
+
+            </div>
+
+            {% else %}
+
+            <div class="details-no-image">
+
+                📦
+
+                <p>
+                    No image uploaded
+                </p>
+
+            </div>
+
+            {% endif %}
+
+
+            <!-- =========================
+                 CONTENT
+            ========================== -->
+
+            <div class="details-content">
+
+
+                <!-- =========================
+                     TYPE + STATUS
+                ========================== -->
+
+                <div class="details-status">
+
+                    <span class="item-type">
+                        {{ item["item_type"] }}
+                    </span>
+
+
+                    {% if item["status"] == "recovered" %}
+
+                    <span class="item-status recovered-label">
+                        ✅ Recovered
+                    </span>
+
+                    {% else %}
+
+                    <span class="item-status">
+                        {{ item["status"] }}
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- =========================
+                     ITEM NAME
+                ========================== -->
+
+                <h2>
+                    {{ item["item_name"] }}
+                </h2>
+
+
+                <!-- =========================
+                     DESCRIPTION
+                ========================== -->
+
+                <p class="details-description">
+
+                    {{ item["description"] or
+                    "No description provided." }}
+
+                </p>
+
+
+                <!-- =========================
+                     INFORMATION
+                ========================== -->
+
+                <div class="details-info">
+
+
+                    <div>
+
+                        <strong>
+                            📂 Category
+                        </strong>
+
+                        <span>
+                            {{ item["category"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            📍 Location
+                        </strong>
+
+                        <span>
+                            {{ item["location"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            📅 Date
+                        </strong>
+
+                        <span>
+                            {{ item["item_date"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            👤 Reported By
+                        </strong>
+
+                        <span>
+                            {{ item["reporter_name"] }}
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- =========================
+                     OWNER ACTIONS
+                ========================== -->
+
+                {% if item["user_id"] == session["user_id"] %}
+
+                <div class="report-actions">
+
+
+                    <!-- EDIT -->
+
+                    <a href="{{ url_for('edit_report', item_id=item['id']) }}" class="edit-btn">
+
+                        ✏️ Edit Report
+
+                    </a>
+
+
+                    <!-- POSSIBLE MATCHES -->
+
+                    {% if item["status"] != "recovered" %}
+
+                    <a href="{{ url_for('matches', item_id=item['id']) }}" class="details-btn">
+
+                        🔍 Find Possible Matches
+
+                    </a>
+
+                    {% endif %}
+
+
+                    <!-- RECOVER -->
+
+                    {% if item["status"] != "recovered" %}
+
+                    <form action="{{ url_for('recover_report', item_id=item['id']) }}" method="POST">
+
+                        <button type="submit" class="recover-btn"
+                            onclick="return confirm('Mark this report as recovered?');">
+
+                            ✅ Mark as Recovered
+
+                        </button>
+
+                    </form>
+
+                    {% else %}
+
+                    <span class="recovered-label">
+
+                        ✅ This Item Is Recovered
+
+                    </span>
+
+                    {% endif %}
+
+
+                    <!-- DELETE -->
+
+                    <form action="{{ url_for('delete_report', item_id=item['id']) }}" method="POST">
+
+                        <button type="submit" class="delete-btn"
+                            onclick="return confirm('Are you sure you want to delete this report?');">
+
+                            🗑️ Delete Report
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+
+                <!-- =========================
+                     OTHER USER ACTIONS
+                ========================== -->
+
+                {% else %}
+
+                <div class="report-actions">
+
+
+                    <!-- POSSIBLE MATCHES -->
+
+                    {% if item["status"] != "recovered" %}
+
+                    <a href="{{ url_for('matches', item_id=item['id']) }}" class="details-btn">
+
+                        🔍 Find Possible Matches
+
+                    </a>
+
+
+                    <!-- CLAIM -->
+
+                    <a href="{{ url_for('claim_item', item_id=item['id']) }}" class="primary-btn">
+
+                        📩 Claim This Item
+
+                    </a>
+
+                    {% else %}
+
+                    <span class="recovered-label">
+
+                        🔒 This Item Has Already Been Recovered
+
+                    </span>
+
+                    {% endif %}
+
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- =========================
+                     NAVIGATION
+                ========================== -->
+
+                <div class="details-navigation">
+
+
+                    <a href="/dashboard" class="secondary-btn">
+
+                        ← Back to Dashboard
+
+                    </a>
+
+
+                    <a href="/my-reports" class="secondary-btn">
+
+                        📋 My Reports
+
+                    </a>
+
+
+                    <a href="/my-claims" class="secondary-btn">
+
+                        📩 My Claims
+
+                    </a>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
+```

@@ -1,0 +1,105 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="auth-page">
+
+        <div class="auth-box">
+
+            <!-- ICON -->
+
+            <div class="auth-icon">
+                🔎
+            </div>
+
+
+            <!-- TITLE -->
+
+            <h1>
+                Create Account
+            </h1>
+
+            <p>
+                Join the Lost & Found community
+            </p>
+
+
+            <!-- REGISTER FORM -->
+
+            <form method="POST" enctype="multipart/form-data">
+
+
+                <!-- FULL NAME -->
+
+                <input type="text" name="name" placeholder="Full Name" required>
+
+
+                <!-- EMAIL -->
+
+                <input type="email" name="email" placeholder="Gmail / Email Address" required>
+
+
+                <!-- PHONE -->
+
+                <input type="tel" name="phone" placeholder="10-Digit Phone Number" maxlength="10" pattern="[0-9]{10}"
+                    inputmode="numeric" required>
+
+
+                <!-- PROFILE PHOTO -->
+
+                <label class="file-label">
+                    📷 Choose Profile Photo
+                </label>
+
+                <input type="file" name="profile_photo" accept=".jpg,.jpeg,.png,.webp" required>
+
+
+                <!-- PASSWORD -->
+
+                <input type="password" name="password" placeholder="Password (Minimum 6 Characters)" minlength="6"
+                    required>
+
+
+                <!-- SUBMIT -->
+
+                <button type="submit">
+                    Create Account →
+                </button>
+
+            </form>
+
+
+            <!-- LOGIN LINK -->
+
+            <p class="auth-bottom">
+
+                Already have an account?
+
+                <a href="{{ url_for('login') }}">
+                    Login
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>
+```

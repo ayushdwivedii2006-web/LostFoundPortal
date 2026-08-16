@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- =========================
+         ANIMATED BACKGROUND
+    ========================== -->
+
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="glow glow-three"></div>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔎 Lost<span>&</span>Found
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('my_reports') }}">
+                My Reports
+            </a>
+
+            <a href="{{ url_for('report') }}">
+                Report Item
+            </a>
+
+            <a href="{{ url_for('my_claims') }}">
+                🤝 My Claims
+            </a>
+
+            <a href="{{ url_for('claims') }}">
+                📩 Claims Received
+            </a>
+
+            <!-- =========================
+                 PROFILE
+            ========================== -->
+
+            <a href="{{ url_for('profile') }}">
+                👤 Profile
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         DASHBOARD
+    ========================== -->
+
+    <main class="dashboard">
+
+
+        <!-- =========================
+             DASHBOARD HEADER
+        ========================== -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <div class="badge">
+                    📊 Your Dashboard
+                </div>
+
+                <h1>
+                    Welcome,
+                    <span>{{ session["user_name"] }}</span>
+                </h1>
+
+                <p>
+                    Track lost and found items from one place.
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('report') }}" class="primary-btn">
+
+                + Report Item
+
+            </a>
+
+        </div>
+
+
+        <!-- =========================
+             STATISTICS
+        ========================== -->
+
+        <section class="dashboard-stats">
+
+
+            <!-- LOST -->
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-icon">
+                    🔎
+                </div>
+
+                <h2>
+                    {{ lost_count }}
+                </h2>
+
+                <p>
+                    Lost Items
+                </p>
+
+            </div>
+
+
+            <!-- FOUND -->
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-icon">
+                    📦
+                </div>
+
+                <h2>
+                    {{ found_count }}
+                </h2>
+
+                <p>
+                    Found Items
+                </p>
+
+            </div>
+
+
+            <!-- TOTAL -->
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-icon">
+                    📋
+                </div>
+
+                <h2>
+                    {{ total_count }}
+                </h2>
+
+                <p>
+                    Total Reports
+                </p>
+
+            </div>
+
+
+            <!-- RECOVERED -->
+
+            <div class="dashboard-card">
+
+                <div class="dashboard-icon">
+                    ✅
+                </div>
+
+                <h2>
+                    {{ recovered_count }}
+                </h2>
+
+                <p>
+                    Recovered
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RECENT REPORTS
+        ========================== -->
+
+        <section class="recent-section">
+
+
+            <div class="section-title">
+
+                <div>
+
+                    <h2>
+                        Recent Reports
+                    </h2>
+
+                    <p>
+                        Latest lost and found items
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 SEARCH & FILTERS
+            ========================== -->
+
+            <div class="dashboard-filters">
+
+
+                <!-- SEARCH -->
+
+                <form method="GET" action="{{ url_for('dashboard') }}" class="search-box">
+
+                    <input type="text" name="search" value="{{ search }}"
+                        placeholder="🔍 Search item, category, location...">
+
+                    <button type="submit">
+                        Search
+                    </button>
+
+                </form>
+
+
+                <!-- FILTERS -->
+
+                <div class="filter-buttons">
+
+                    <a href="{{ url_for('dashboard') }}" class="filter-btn">
+
+                        All
+
+                    </a>
+
+
+                    <a href="{{ url_for('dashboard', type='Lost') }}" class="filter-btn lost-filter">
+
+                        🔎 Lost
+
+                    </a>
+
+
+                    <a href="{{ url_for('dashboard', type='Found') }}" class="filter-btn found-filter">
+
+                        📦 Found
+
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+                 ITEMS
+            ========================== -->
+
+            <div class="items-grid">
+
+
+                {% if items %}
+
+
+                {% for item in items %}
+
+
+                <div class="item-card">
+
+
+                    <!-- =========================
+                         TYPE + STATUS
+                    ========================== -->
+
+                    <div class="item-top">
+
+                        <span class="item-type">
+                            {{ item["item_type"] }}
+                        </span>
+
+
+                        {% if item["status"] == "recovered" %}
+
+                        <span class="item-status recovered-label">
+
+                            ✅ Recovered
+
+                        </span>
+
+                        {% else %}
+
+                        <span class="item-status">
+
+                            {{ item["status"] }}
+
+                        </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- =========================
+                         IMAGE
+                    ========================== -->
+
+                    {% if item["image"] %}
+
+                    <div class="item-image">
+
+                        <img src="{{ url_for(
+                                'static',
+                                filename='uploads/' + item['image']
+                            ) }}" alt="{{ item['item_name'] }}">
+
+                    </div>
+
+                    {% else %}
+
+                    <div class="item-image no-image">
+
+                        📦
+
+                    </div>
+
+                    {% endif %}
+
+
+                    <!-- =========================
+                         ITEM NAME
+                    ========================== -->
+
+                    <h3>
+                        {{ item["item_name"] }}
+                    </h3>
+
+
+                    <!-- =========================
+                         DESCRIPTION
+                    ========================== -->
+
+                    <p>
+
+                        {{ item["description"] or
+                        "No description provided." }}
+
+                    </p>
+
+
+                    <!-- =========================
+                         ITEM INFORMATION
+                    ========================== -->
+
+                    <div class="item-info">
+
+                        <span>
+                            📂 {{ item["category"] }}
+                        </span>
+
+                        <span>
+                            📍 {{ item["location"] }}
+                        </span>
+
+                        <span>
+                            📅 {{ item["item_date"] }}
+                        </span>
+
+                    </div>
+
+
+                    <!-- =========================
+                         ACTIONS
+                    ========================== -->
+
+                    <div class="report-actions">
+
+                        <a href="{{ url_for(
+                                'report_details',
+                                item_id=item['id']
+                            ) }}" class="details-btn">
+
+                            👁️ View Details
+
+                        </a>
+
+
+                        <!-- POSSIBLE MATCHES -->
+
+                        {% if item["status"] != "recovered" %}
+
+                        <a href="{{ url_for(
+                                'matches',
+                                item_id=item['id']
+                            ) }}" class="details-btn">
+
+                            🔗 Matches
+
+                        </a>
+
+                        {% endif %}
+
+                    </div>
+
+
+                </div>
+
+
+                {% endfor %}
+
+
+                {% else %}
+
+
+                <!-- =========================
+                     EMPTY STATE
+                ========================== -->
+
+                <div class="empty-state">
+
+                    <div>
+                        📭
+                    </div>
+
+                    <h3>
+                        No Reports Yet
+                    </h3>
+
+                    <p>
+                        You haven't reported any lost or found items.
+                    </p>
+
+                    <a href="{{ url_for('report') }}" class="primary-btn">
+
+                        Report Your First Item
+
+                    </a>
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+</body>
+
+</html>

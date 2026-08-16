@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        .profile-page {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .profile-card {
+            max-width: 600px;
+            margin: auto;
+            padding: 40px;
+            text-align: center;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.30);
+        }
+
+        .profile-photo-box {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 5px solid rgba(255, 255, 255, 0.30);
+            background: rgba(255, 255, 255, 0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-placeholder {
+            font-size: 65px;
+        }
+
+        .profile-card h1 {
+            margin-bottom: 10px;
+        }
+
+        .profile-card>p {
+            opacity: 0.75;
+            margin-bottom: 30px;
+        }
+
+        .profile-info {
+            text-align: left;
+            margin-top: 25px;
+        }
+
+        .profile-info-box {
+            padding: 18px 20px;
+            margin-bottom: 15px;
+            border-radius: 15px;
+            background: rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+        }
+
+        .profile-info-box strong {
+            display: block;
+            margin-bottom: 6px;
+            opacity: 0.65;
+            font-size: 13px;
+        }
+
+        .profile-info-box span {
+            font-size: 17px;
+        }
+
+        .profile-back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            background: linear-gradient(135deg, #2196f3, #6366f1);
+            color: white;
+            font-weight: 600;
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔎 Lost<span>&</span>Found
+        </div>
+
+        <div class="nav-links">
+
+            <a href="{{ url_for('home') }}">
+                Home
+            </a>
+
+            <a href="{{ url_for('dashboard') }}">
+                Dashboard
+            </a>
+
+            <a href="{{ url_for('my_reports') }}">
+                My Reports
+            </a>
+
+            <a href="{{ url_for('report') }}">
+                Report Item
+            </a>
+
+            <a href="{{ url_for('my_claims') }}">
+                🤝 My Claims
+            </a>
+
+            <a href="{{ url_for('claims') }}">
+                📩 Claims Received
+            </a>
+
+            <a href="{{ url_for('profile') }}">
+                👤 Profile
+            </a>
+
+            <a href="{{ url_for('logout') }}">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         PROFILE
+    ========================== -->
+
+    <main class="profile-page">
+
+        <div class="profile-card">
+
+            <!-- PROFILE PHOTO -->
+
+            <div class="profile-photo-box">
+
+                {% if user["profile_photo"] %}
+
+                <img src="{{ url_for(
+                            'static',
+                            filename='uploads/' + user['profile_photo']
+                        ) }}" alt="Profile Photo" class="profile-photo">
+
+                {% else %}
+
+                <div class="profile-placeholder">
+                    👤
+                </div>
+
+                {% endif %}
+
+            </div>
+
+
+            <!-- NAME -->
+
+            <h1>
+                {{ user["name"] }}
+            </h1>
+
+            <p>
+                Lost & Found Member
+            </p>
+
+
+            <!-- USER INFORMATION -->
+
+            <div class="profile-info">
+
+                <div class="profile-info-box">
+
+                    <strong>
+                        👤 Full Name
+                    </strong>
+
+                    <span>
+                        {{ user["name"] }}
+                    </span>
+
+                </div>
+
+
+                <div class="profile-info-box">
+
+                    <strong>
+                        📧 Email Address
+                    </strong>
+
+                    <span>
+                        {{ user["email"] }}
+                    </span>
+
+                </div>
+
+
+                <div class="profile-info-box">
+
+                    <strong>
+                        📱 Phone Number
+                    </strong>
+
+                    <span>
+                        {{ user["phone"] }}
+                    </span>
+
+                </div>
+
+
+                <div class="profile-info-box">
+
+                    <strong>
+                        📅 Account Created
+                    </strong>
+
+                    <span>
+                        {{ user["created_at"] }}
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <a href="{{ url_for('dashboard') }}" class="profile-back">
+
+                ← Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>

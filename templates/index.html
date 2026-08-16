@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Lost & Found Portal</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- =========================
+         ANIMATED BACKGROUND
+    ========================== -->
+
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="glow glow-three"></div>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔎 Lost<span>&</span>Found
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">Home</a>
+
+            <a href="#">Lost Items</a>
+
+            <a href="#">Found Items</a>
+
+            <a href="#">About</a>
+
+            <a href="{{ url_for('login') }}" class="login-btn">
+                Login
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         HERO SECTION
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="hero-content">
+
+            <div class="badge">
+                ✨ Smart Lost & Found Platform
+            </div>
+
+            <h1>
+                Lost Something?
+                <span>Let's Find It.</span>
+            </h1>
+
+            <p>
+                Report lost items, discover found belongings,
+                and help return them to their rightful owners.
+            </p>
+
+
+            <!-- Buttons -->
+
+            <div class="hero-buttons">
+
+                <!-- LOST ITEM BUTTON -->
+                <a href="{{ url_for('report') }}" class="primary-btn">
+                    🔍 I Lost Something
+                </a>
+
+                <!-- FOUND ITEM BUTTON -->
+                <a href="{{ url_for('report') }}" class="secondary-btn">
+                    📦 I Found Something
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         STATISTICS
+    ========================== -->
+
+    <section class="stats-section">
+
+        <!-- Lost -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                🔎
+            </div>
+
+            <h2>
+                1,240+
+            </h2>
+
+            <p>
+                Lost Items
+            </p>
+
+        </div>
+
+
+        <!-- Found -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                📦
+            </div>
+
+            <h2>
+                980+
+            </h2>
+
+            <p>
+                Found Items
+            </p>
+
+        </div>
+
+
+        <!-- Recovered -->
+
+        <div class="stat-card">
+
+            <div class="stat-icon">
+                ✅
+            </div>
+
+            <h2>
+                720+
+            </h2>
+
+            <p>
+                Recovered Items
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         HOW IT WORKS
+    ========================== -->
+
+    <section class="how-section">
+
+        <div class="section-heading">
+
+            <div class="badge">
+                🚀 Simple & Smart
+            </div>
+
+            <h2>
+                How <span>It Works</span>
+            </h2>
+
+            <p>
+                Three simple steps to recover what matters.
+            </p>
+
+        </div>
+
+
+        <div class="steps-container">
+
+
+            <!-- STEP 1 -->
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <div class="step-icon">
+                    📝
+                </div>
+
+                <h3>
+                    Report
+                </h3>
+
+                <p>
+                    Submit details about your lost or found item.
+                </p>
+
+            </div>
+
+
+            <!-- STEP 2 -->
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <div class="step-icon">
+                    🔍
+                </div>
+
+                <h3>
+                    Find a Match
+                </h3>
+
+                <p>
+                    Discover items that match your report.
+                </p>
+
+            </div>
+
+
+            <!-- STEP 3 -->
+
+            <div class="step-card">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <div class="step-icon">
+                    🤝
+                </div>
+
+                <h3>
+                    Recover
+                </h3>
+
+                <p>
+                    Connect and safely return the item.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+</body>
+
+</html>

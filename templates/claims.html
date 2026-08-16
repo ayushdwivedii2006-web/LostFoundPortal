@@ -1,0 +1,334 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Claims Received | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="glow glow-three"></div>
+
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔎 Lost<span>&</span>Found
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/my-reports">
+                My Reports
+            </a>
+
+            <a href="/report">
+                Report Item
+            </a>
+
+            <a href="/claims">
+                Claims
+            </a>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- MAIN -->
+
+    <main class="dashboard">
+
+
+        <!-- HEADER -->
+
+        <div class="dashboard-header">
+
+            <div>
+
+                <div class="badge">
+                    📩 Claim Management
+                </div>
+
+                <h1>
+                    Claims <span>Received</span>
+                </h1>
+
+                <p>
+                    Review claims submitted for your reported items.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- CLAIMS -->
+
+        <div class="items-grid">
+
+            {% if claims %}
+
+            {% for claim in claims %}
+
+            <div class="item-card">
+
+
+                <!-- ITEM IMAGE -->
+
+                {% if claim["image"] %}
+
+                <div class="item-image">
+
+                    <img src="{{ url_for(
+                                'static',
+                                filename='uploads/' + claim['image']
+                            ) }}" alt="{{ claim['item_name'] }}">
+
+                </div>
+
+                {% else %}
+
+                <div class="item-image no-image">
+                    📦
+                </div>
+
+                {% endif %}
+
+
+                <!-- CLAIM STATUS -->
+
+                <div class="item-top">
+
+                    <span class="item-type">
+                        {{ claim["item_type"] }}
+                    </span>
+
+
+                    {% if claim["status"] == "accepted" %}
+
+                    <span class="item-status recovered-label">
+                        ✅ Accepted
+                    </span>
+
+                    {% elif claim["status"] == "rejected" %}
+
+                    <span class="item-status">
+                        ❌ Rejected
+                    </span>
+
+                    {% else %}
+
+                    <span class="item-status">
+                        ⏳ Pending
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <!-- ITEM NAME -->
+
+                <h3>
+                    {{ claim["item_name"] }}
+                </h3>
+
+
+                <!-- CLAIMANT -->
+
+                <div class="details-info">
+
+                    <div>
+
+                        <strong>
+                            👤 Claimant
+                        </strong>
+
+                        <span>
+                            {{ claim["claimant_name"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            📧 Email
+                        </strong>
+
+                        <span>
+                            {{ claim["claimant_email"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            📂 Category
+                        </strong>
+
+                        <span>
+                            {{ claim["category"] }}
+                        </span>
+
+                    </div>
+
+
+                    <div>
+
+                        <strong>
+                            📍 Location
+                        </strong>
+
+                        <span>
+                            {{ claim["location"] }}
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CLAIM MESSAGE -->
+
+                <div class="match-reasons">
+
+                    <strong>
+                        💬 Claim Message
+                    </strong>
+
+                    <p>
+                        {{ claim["message"] }}
+                    </p>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                {% if claim["status"] == "pending" %}
+
+                <div class="report-actions">
+
+
+                    <form action="{{ url_for(
+                                'accept_claim',
+                                claim_id=claim['id']
+                            ) }}" method="POST">
+
+                        <button type="submit" class="recover-btn" onclick="return confirm(
+                                    'Accept this claim?'
+                                );">
+
+                            ✅ Accept Claim
+
+                        </button>
+
+                    </form>
+
+
+                    <form action="{{ url_for(
+                                'reject_claim',
+                                claim_id=claim['id']
+                            ) }}" method="POST">
+
+                        <button type="submit" class="delete-btn" onclick="return confirm(
+                                    'Reject this claim?'
+                                );">
+
+                            ❌ Reject Claim
+
+                        </button>
+
+                    </form>
+
+
+                </div>
+
+                {% endif %}
+
+
+                <!-- VIEW REPORT -->
+
+                <div class="report-actions">
+
+                    <a href="{{ url_for(
+                                'report_details',
+                                item_id=claim['item_id']
+                            ) }}" class="details-btn">
+
+                        👁️ View Report
+
+                    </a>
+
+                </div>
+
+
+            </div>
+
+            {% endfor %}
+
+
+            {% else %}
+
+
+            <!-- EMPTY -->
+
+            <div class="empty-state">
+
+                <div>
+                    📭
+                </div>
+
+                <h3>
+                    No Claims Yet
+                </h3>
+
+                <p>
+                    Nobody has submitted a claim for your reports yet.
+                </p>
+
+                <a href="/dashboard" class="primary-btn">
+
+                    ← Back to Dashboard
+
+                </a>
+
+            </div>
+
+
+            {% endif %}
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
+```

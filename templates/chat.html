@@ -1,0 +1,503 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Private Chat | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b1020;
+            color: white;
+            min-height: 100vh;
+        }
+
+        .chat-page {
+            width: 100%;
+            max-width: 1100px;
+            margin: auto;
+            padding: 30px 20px;
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(15px);
+            margin-bottom: 20px;
+        }
+
+        .chat-title h1 {
+            margin: 0 0 7px;
+            font-size: 28px;
+        }
+
+        .chat-title p {
+            margin: 0;
+            color: #aab2c8;
+        }
+
+        .back-btn {
+            text-decoration: none;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .reports-box {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .report-mini {
+            padding: 15px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .report-mini strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #8ea7ff;
+        }
+
+        .report-mini span {
+            color: #d8dcef;
+        }
+
+        .chat-container {
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 22px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .chat-top {
+            padding: 18px 22px;
+            background: rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-top h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .online-text {
+            color: #79e08b;
+            font-size: 13px;
+            margin-top: 5px;
+        }
+
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message-row {
+            display: flex;
+            width: 100%;
+        }
+
+        .message-row.mine {
+            justify-content: flex-end;
+        }
+
+        .message-row.theirs {
+            justify-content: flex-start;
+        }
+
+        .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 17px;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .mine .message-bubble {
+            background: #5268ff;
+            border-bottom-right-radius: 5px;
+        }
+
+        .theirs .message-bubble {
+            background: rgba(255, 255, 255, 0.1);
+            border-bottom-left-radius: 5px;
+        }
+
+        .sender-name {
+            font-size: 12px;
+            color: #b8c0d8;
+            margin-bottom: 4px;
+        }
+
+        .message-text {
+            font-size: 15px;
+            white-space: pre-wrap;
+        }
+
+        .message-time {
+            margin-top: 5px;
+            font-size: 10px;
+            color: rgba(255, 255, 255, 0.65);
+            text-align: right;
+        }
+
+        .empty-chat {
+            margin: auto;
+            text-align: center;
+            color: #9ea6bc;
+        }
+
+        .empty-chat-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        .message-form {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .message-input {
+            flex: 1;
+            resize: none;
+            min-height: 50px;
+            max-height: 130px;
+            padding: 14px 16px;
+            border: none;
+            outline: none;
+            border-radius: 13px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 15px;
+        }
+
+        .message-input::placeholder {
+            color: #9da5bb;
+        }
+
+        .send-btn {
+            border: none;
+            cursor: pointer;
+            padding: 0 25px;
+            border-radius: 13px;
+            background: #5268ff;
+            color: white;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        .send-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 700px) {
+
+            .chat-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .reports-box {
+                grid-template-columns: 1fr;
+            }
+
+            .chat-container {
+                height: 550px;
+            }
+
+            .message-bubble {
+                max-width: 85%;
+            }
+
+            .message-form {
+                padding: 10px;
+            }
+
+            .send-btn {
+                padding: 0 16px;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="chat-page">
+
+
+        <!-- =========================
+         CHAT HEADER
+    ========================== -->
+
+        <div class="chat-header">
+
+            <div class="chat-title">
+
+                <h1>
+                    💬 Private Chat
+                </h1>
+
+                <p>
+                    Chat with {{ other_user_name }}
+                </p>
+
+            </div>
+
+
+            <a href="{{ url_for('matches', item_id=item_id) }}" class="back-btn">
+                ← Back to Matches
+            </a>
+
+        </div>
+
+
+        <!-- =========================
+         REPORT INFORMATION
+    ========================== -->
+
+        <div class="reports-box">
+
+
+            <div class="report-mini">
+
+                <strong>
+                    Your / Current Report
+                </strong>
+
+                <span>
+                    {{ current_item["item_name"] }}
+                </span>
+
+            </div>
+
+
+            <div class="report-mini">
+
+                <strong>
+                    Matched Report
+                </strong>
+
+                <span>
+                    {{ match_item["item_name"] }}
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+         CHAT CONTAINER
+    ========================== -->
+
+        <div class="chat-container">
+
+
+            <!-- CHAT TOP -->
+
+            <div class="chat-top">
+
+                <h2>
+                    👤 {{ other_user_name }}
+                </h2>
+
+                <div class="online-text">
+                    🔒 Private conversation
+                </div>
+
+            </div>
+
+
+            <!-- =========================
+             MESSAGES
+        ========================== -->
+
+            <div class="messages-area" id="messagesArea">
+
+
+                {% if messages %}
+
+
+                {% for message in messages %}
+
+
+                {% if message["sender_id"] == current_user_id %}
+
+                <div class="message-row mine">
+
+                    <div class="message-bubble">
+
+                        <div class="sender-name">
+                            You
+                        </div>
+
+                        <div class="message-text">
+                            {{ message["message"] }}
+                        </div>
+
+                        {% if message["created_at"] %}
+
+                        <div class="message-time">
+                            {{ message["created_at"] }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                {% else %}
+
+
+                <div class="message-row theirs">
+
+                    <div class="message-bubble">
+
+                        <div class="sender-name">
+                            {{ message["sender_name"] }}
+                        </div>
+
+                        <div class="message-text">
+                            {{ message["message"] }}
+                        </div>
+
+                        {% if message["created_at"] %}
+
+                        <div class="message-time">
+                            {{ message["created_at"] }}
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+                {% endif %}
+
+
+                {% endfor %}
+
+
+                {% else %}
+
+
+                <div class="empty-chat">
+
+                    <div class="empty-chat-icon">
+                        💬
+                    </div>
+
+                    <h3>
+                        No messages yet
+                    </h3>
+
+                    <p>
+                        Start the conversation with
+                        {{ other_user_name }}.
+                    </p>
+
+                </div>
+
+
+                {% endif %}
+
+
+            </div>
+
+
+            <!-- =========================
+             MESSAGE FORM
+        ========================== -->
+
+            <form method="POST" class="message-form">
+
+                <textarea name="message" class="message-input" placeholder="Type your message..." maxlength="2000"
+                    required></textarea>
+
+
+                <button type="submit" class="send-btn">
+                    ➤ Send
+                </button>
+
+            </form>
+
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+     AUTO SCROLL
+========================== -->
+
+    <script>
+
+        const messagesArea =
+            document.getElementById("messagesArea");
+
+        if (messagesArea) {
+
+            messagesArea.scrollTop =
+                messagesArea.scrollHeight;
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>
+```

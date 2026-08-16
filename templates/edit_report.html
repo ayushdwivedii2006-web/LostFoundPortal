@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Report | Lost & Found</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <!-- Background -->
+
+    <div class="glow glow-one"></div>
+    <div class="glow glow-two"></div>
+    <div class="glow glow-three"></div>
+
+
+    <!-- Navbar -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            🔎 Lost<span>&</span>Found
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/dashboard">
+                Dashboard
+            </a>
+
+            <a href="/my-reports">
+                My Reports
+            </a>
+
+            <a href="/logout">
+                Logout
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- Edit Section -->
+
+    <section class="report-page">
+
+        <div class="report-box">
+
+            <div class="report-icon">
+                ✏️
+            </div>
+
+            <h1>
+                Edit <span>Report</span>
+            </h1>
+
+            <p>
+                Update your lost or found item details.
+            </p>
+
+
+            <form method="POST">
+
+
+                <!-- Item Type -->
+
+                <div class="form-group">
+
+                    <label>
+                        What happened?
+                    </label>
+
+                    <select name="item_type" required>
+
+                        <option value="Lost" {% if item["item_type"]=="Lost" %}selected{% endif %}>
+                            🔍 I Lost Something
+                        </option>
+
+                        <option value="Found" {% if item["item_type"]=="Found" %}selected{% endif %}>
+                            📦 I Found Something
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Item Name -->
+
+                <div class="form-group">
+
+                    <label>
+                        Item Name
+                    </label>
+
+                    <input type="text" name="item_name" value="{{ item['item_name'] }}" required>
+
+                </div>
+
+
+                <!-- Category -->
+
+                <div class="form-group">
+
+                    <label>
+                        Category
+                    </label>
+
+                    <select name="category" required>
+
+                        <option value="Electronics" {% if item["category"]=="Electronics" %}selected{% endif %}>
+                            📱 Electronics
+                        </option>
+
+                        <option value="Documents" {% if item["category"]=="Documents" %}selected{% endif %}>
+                            📄 Documents
+                        </option>
+
+                        <option value="Wallet" {% if item["category"]=="Wallet" %}selected{% endif %}>
+                            👛 Wallet
+                        </option>
+
+                        <option value="Keys" {% if item["category"]=="Keys" %}selected{% endif %}>
+                            🔑 Keys
+                        </option>
+
+                        <option value="Bag" {% if item["category"]=="Bag" %}selected{% endif %}>
+                            🎒 Bag
+                        </option>
+
+                        <option value="Clothing" {% if item["category"]=="Clothing" %}selected{% endif %}>
+                            👕 Clothing
+                        </option>
+
+                        <option value="Other" {% if item["category"]=="Other" %}selected{% endif %}>
+                            📦 Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- Location -->
+
+                <div class="form-group">
+
+                    <label>
+                        Location
+                    </label>
+
+                    <input type="text" name="location" value="{{ item['location'] }}" required>
+
+                </div>
+
+
+                <!-- Date -->
+
+                <div class="form-group">
+
+                    <label>
+                        Date
+                    </label>
+
+                    <input type="date" name="item_date" value="{{ item['item_date'] }}" required>
+
+                </div>
+
+
+                <!-- Description -->
+
+                <div class="form-group">
+
+                    <label>
+                        Description
+                    </label>
+
+                    <textarea name="description" rows="5"
+                        placeholder="Describe the item...">{{ item["description"] or "" }}</textarea>
+
+                </div>
+
+
+                <!-- Buttons -->
+
+                <div class="edit-actions">
+
+                    <a href="{{ url_for('my_reports') }}" class="secondary-btn">
+
+                        ← Cancel
+
+                    </a>
+
+                    <button type="submit" class="report-btn">
+
+                        💾 Save Changes
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+        </div>
+
+    </section>
+
+</body>
+
+</html>
